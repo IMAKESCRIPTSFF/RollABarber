@@ -1,24 +1,16 @@
-
---// Zombie Teleporter + Simulated Space Auto Jump
---// ONLY RUNS IN GAME ID: 87029994390208
---// Continuous tracking | Auto Jump every 120 seconds
---// Draggable GUI | Minimize | X to unload
-
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 
 local player = Players.LocalPlayer
 
---// GAME ID WHITELIST
 local ALLOWED_GAME_ID = 87029994390208
 
 if game.PlaceId ~= ALLOWED_GAME_ID then
-    warn("[Zombie TP GUI] Unauthorized game! Script stopped.")
+    warn("wrong game Twin.")
     return
 end
 
---// INITIALIZATION
 local playerGui = player:WaitForChild("PlayerGui")
 local zombieFolder = workspace:WaitForChild("RAB_ZombieApocalypse")
 
@@ -35,7 +27,6 @@ if oldGui then
     oldGui:Destroy()
 end
 
---// GUI
 local gui = Instance.new("ScreenGui")
 gui.Name = "ZombieTPGui"
 gui.ResetOnSpawn = false
@@ -112,7 +103,6 @@ status.Font = Enum.Font.Gotham
 status.TextXAlignment = Enum.TextXAlignment.Left
 status.Parent = frame
 
---// DRAGGING
 local dragging = false
 local dragStart, startPos
 
@@ -145,7 +135,6 @@ table.insert(connections, UserInputService.InputEnded:Connect(function(input)
     end
 end))
 
---// CHARACTER HELPERS
 local function getRoot()
     local character = player.Character
     if not character then return nil end
@@ -199,7 +188,6 @@ local function updateJumpButton()
         or Color3.fromRGB(150, 45, 45)
 end
 
---// TELEPORT TOGGLE
 table.insert(connections, toggle.MouseButton1Click:Connect(function()
     enabled = not enabled
     currentZombie = nil
@@ -207,7 +195,6 @@ table.insert(connections, toggle.MouseButton1Click:Connect(function()
     status.Text = enabled and "Status: Finding zombies" or "Status: Disabled"
 end))
 
---// AUTO JUMP EVERY 120 SECONDS
 table.insert(connections, jumpToggle.MouseButton1Click:Connect(function()
     autoJumpEnabled = not autoJumpEnabled
     jumpThreadToken += 1
@@ -251,7 +238,6 @@ table.insert(connections, jumpToggle.MouseButton1Click:Connect(function()
     end
 end))
 
---// MINIMIZE / RESTORE
 table.insert(connections, minimize.MouseButton1Click:Connect(function()
     minimized = not minimized
 
@@ -266,7 +252,6 @@ table.insert(connections, minimize.MouseButton1Click:Connect(function()
     minimize.Text = minimized and "+" or "-"
 end))
 
---// UNLOAD EVERYTHING
 table.insert(connections, close.MouseButton1Click:Connect(function()
     unloaded = true
     enabled = false
@@ -280,7 +265,6 @@ table.insert(connections, close.MouseButton1Click:Connect(function()
     gui:Destroy()
 end))
 
---// CONTINUOUSLY TELEPORT YOU TO THE MOVING ZOMBIE
 table.insert(connections, RunService.Heartbeat:Connect(function()
     if unloaded or not enabled then return end
 
@@ -310,5 +294,3 @@ table.insert(connections, RunService.Heartbeat:Connect(function()
         status.Text = "Target: " .. currentZombie.Name
     end
 end))
-
-print("[Zombie TP GUI] Loaded - Authorized game: " .. ALLOWED_GAME_ID)
