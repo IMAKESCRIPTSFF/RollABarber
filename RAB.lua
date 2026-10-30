@@ -290,7 +290,7 @@ table.insert(connections, RunService.Heartbeat:Connect(function()
     local zombieRoot = currentZombie:FindFirstChild("HumanoidRootPart")
 
     if zombieRoot then
-        root.CFrame = zombieRoot.CFrame * CFrame.new(0, 0, -2)
+        root.CFrame = zombieRoot.CFrame * CFrame.new(0, 0, 2)
         status.Text = "Target: " .. currentZombie.Name
     end
 end))
